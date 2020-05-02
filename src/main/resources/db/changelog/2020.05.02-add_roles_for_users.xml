@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet id="1.0.1" author="d.borysov">
+        <sql>CREATE EXTENSION IF NOT EXISTS "uuid-ossp";</sql>
+    </changeSet>
+
+    <changeSet id="1.0.2" author="d.borysov">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="roles" schemaName="public"/>
+        </preConditions>
+
+        <sql>    INSERT INTO public.roles(uuid, name) VALUES (uuid_generate_v4(), 'admin');</sql>
+        <sql>    INSERT INTO public.roles(uuid, name) VALUES (uuid_generate_v4(), 'user');</sql>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,29 @@
+
+.navbar-nav > li{
+    padding-left:30px;
+    padding-right:60px;
+}
+
+.form-inline .form-group {
+    margin-right:4px;
+}
+
+.form-group.required .control-label:after {
+    content:" *";
+    color:red;
+}
+
+textarea { resize:none; }
+
+.dependent {
+    display: none;
+}
+
+.card {
+    margin-top: 2px;
+}
+
+.questionnaire-label {
+    width: auto;
+    margin-left: 15px;
+}

@@ -1,0 +1,37 @@
+spring:
+    jpa:
+        database: POSTGRESQL
+        show-sql: false
+        hibernate:
+            ddl-auto: update
+            dialect:  org.hibernate.dialect.PostgreSQL95Dialect
+        properties.hibernate.temp.use_jdbc_metadata_defaults: false
+    thymeleaf:
+      mode: LEGACYHTML5
+      cache: false
+    liquibase:
+      change-log: classpath:db/db.changelog-master.yaml
+    datasource:
+        platform: postgres
+        url: ${SPRING_DATASOURE_URL:jdbc:postgresql://localhost:5432/desk-invest}
+        username: ${SPRING_DATASOURCE_USERNAME:postgres}
+        password: ${SPRING_DATASOURCE_PASSWORD :root}
+        driverClassName: org.postgresql.Driver
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: borysov.power@gmail.com
+      password: borysov.power11
+      properties.mail.smtp:
+        auth: true
+        starttls.enable: true
+
+security.oauth2.client.clientId: 1083328800849-5208005vtgmoghmfkucocht5kj62drkm.apps.googleusercontent.com
+security.oauth2.client.clientSecret: a0eFI6zQkvRfbEnaNz-jat1t
+security.oauth2.client.accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+security.oauth2.client.userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+security.oauth2.client.clientAuthenticationScheme: form
+security.oauth2.client.scope: openid,email,profile
+security.oauth2.resource.userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+security.oauth2.resource.preferTokenInfo: true
+

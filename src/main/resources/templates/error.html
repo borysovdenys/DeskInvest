@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div th:include="head.html"></div>
+
+<body>
+<div th:include="header.html"></div>
+<div>
+    <br/>
+    <h1 class="text-center" th:text="#{title}"/>
+    <br/>
+    <br/>
+    <h4 class="text-center" th:text="#{error.oops}"/>
+    <h4 class="text-center" th:text="#{error.message}"/>
+    <h1 class="text-center"><a th:href="@{/index}" th:text="#{error.goBack}"/></h1>
+
+</div>
+<div th:include="footer.html"></div>
+</body>
+</html>

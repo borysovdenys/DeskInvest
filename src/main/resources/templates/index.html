@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="head.html"></head>
+
+<body>
+
+<div th:include="header.html"></div>
+
+<main role="main" class="container" style="width: 40%;">
+
+    <div class="card">
+        <article class="card-body">
+            <h4 class="card-title text-center mb-4 mt-1" th:text="#{title}"/>
+            <hr>
+                      <a href="home" class="btn btn-block btn-social btn-google" role="button" aria-pressed="true">
+                          <i class="fab fa-google"></i> <output  th:text="#{login-form.signinWithGoogle}"/></a>
+        </article>
+    </div>
+
+</main>
+<div th:include="footer.html"></div>
+</body>
+</html>
