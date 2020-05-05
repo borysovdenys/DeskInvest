@@ -13,8 +13,8 @@ public class CurrencyScheduler {
 
     private final CurrencyService currencyService;
 
-    @Scheduled(cron = "0 0 0 * * *")
     //@Scheduled(cron = "1 * * * * *")
+    @Scheduled(cron = "0 10 0 * * *")
     public void scheduleDailyCurrencyUpdateTask() {
         currencyService.dailyCurrencyUpdate();
     }
