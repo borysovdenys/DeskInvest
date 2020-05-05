@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="parts/head.html"></head>
+
+<body>
+
+<div th:include="parts/header.html"></div>
+
+<main role="main" class="container" style="width: 90%; max-width: 3000px;">
+
+    <div class="card">
+      <article class="card-body">
+          <p th:if="${addItemError}" class="text-danger" th:text="#{items.addNew}"/>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <h4 class="card-title" th:text="#{header.invests}"/>
+                </div>
+                <div class="col">
+                    <a class="btn btn-primary float-right"> <!--@{/items/updateAll}-->
+                        <i class="fas fa-sync-alt"></i><span th:text="' ' + #{items.updateAll}"></span>
+                    </a>
+                </div>
+                <div class="col">
+                    <a th:href="@{/items/{uuid}(uuid=${0})}" class="btn btn-primary float-right">
+                        <i class="fas fa-plus"></i><span th:text="' ' + #{items.addNew}"></span>
+                    </a>
+                </div>
+            </div>
+            <br/>
+            <table class="table table-striped">
+
+                <thead>
+                <th scope="col" th:text="#{items.table.N}"/>
+                <th scope="col" th:text="#{items.table.picture}"/>
+                <th scope="col" th:text="#{items.table.name}"/>
+                <th scope="col" th:width="150px" th:text="#{items.table.steamLink}"/>
+                <th scope="col" th:width="200px" th:text="#{items.table.startDateTrack}"/>
+                <th scope="col" th:width="150px" th:text="#{items.table.startPrice}"/>
+                <th scope="col" th:width="150px" th:text="#{items.table.currentPrice}"/>
+                <th scope="col" th:width="200px" th:text="#{items.table.lastDateUpdate}"/>
+                <th scope="col"/>
+                </thead>
+                <tbody>
+                <tr th:each="item,iter : ${page}">
+                    <td th:text="${iter.count}"/>
+                    <td><img th:src="${item.picture}" alt=":)" /></td>
+                    <td th:text="${item.name}"/>
+                    <td><a th:href="${item.url}" target="_blank" /><i class="fab fa-steam"></i><output th:text=" #{items.table.toSteam}"/> </td>
+                    <td th:text="${#temporals.format(item.startDateTrack, 'dd MMMM yyyy')}"/>
+                    <td th:utext="${item.startPrices}" />
+                    <td th:utext="${item.currentPrices}"/>
+                    <td th:text="${#temporals.format(item.lastDateUpdate, 'dd MMMM yyyy HH:mm:ss')}"/>
+                    <td><a th:href="@{/items/{id}(id=${item.uuid})}"><i class="fas fa-edit"></i></a></td>
+                    <td><a th:href="@{/items/delete/{uuid}(uuid=${item.uuid})}"><i class="fas fa-trash-alt"></i></a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pagination-div text-center">
+                <th:block th:if="${page.totalElements > 5}">
+                <span th:if="${page.hasPrevious()}">
+                    <a th:href="@{/items(page=${page.number-1},size=${page.size})}" th:text="#{pagging.previous}"/>
+               </span>
+                    <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+                        <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
+                        <span th:unless="${page.number == i}">
+                       <a th:href="@{/items(page=${i},size=${page.size})}">[[${i}+1]]</a>
+                    </span>
+                    </th:block>
+                    <span th:if="${page.hasNext()}">
+                    <a th:href="@{/items(page=${page.number+1},size=${page.size})}" th:text="#{pagging.next}"/>
+                 </span>
+                </th:block>
+            </div>
+           <th:block th:if="${takenItem != null}">
+                <div class="modal" tabindex="-1" role="dialog" id="myModal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <form class="form-group" th:action="@{/items/saveItem}" th:object="${modifiedItem}"
+                                  method="post">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" th:text="#{items.editDialog.title}"/>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="uuid" name="uuid" th:value="${takenItem.uuid}">
+                                    <div class="form-group row required">
+                                        <label for="url" class="col-sm-5 control-label"
+                                               th:text="#{items.editDialog.url}"/>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" th:value="${takenItem.url}"
+                                                   name="url" id="url" required th:maxlength="150">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                        <label for="startDateTrack" class="col-sm-5 control-label"
+                                               th:text="#{items.editDialog.startDateTrack}"/>
+                                        <div class="col-sm-5">
+                                            <input type="date" class="form-control" th:value="${takenItem.startDateTrack}"
+                                                   name="startDateTrack" id="startDateTrack" required th:maxlength="150">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row required">
+                                        <label for="url" class="col-sm-5 control-label"
+                                               th:text="#{items.editDialog.startPriceUSD}"/>
+                                        <div class="col-sm-5">
+                                            <input type="number" step="0.01" class="form-control" th:value="${takenItem.startPriceUSD}"
+                                                  th:min="0" name="startPriceUSD" id="startPriceUSD" required th:maxlength="150">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" th:text="#{common.save}"/>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{common.cancel}"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${deleteItem != null}">
+               <div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+                   <div class="modal-dialog" role="document">
+                       <div class="modal-content">
+                           <form class="form-group" th:action="@{/items/delete}" th:object="${uuid}" method="post">
+                               <div class="modal-header">
+                                   <h5 class="modal-title" id="exampleModalLabel" th:text="#{items.deleteTitle}"/>
+                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                       <span aria-hidden="true">&times;</span>
+                                   </button>
+                               </div>
+                               <div class="modal-body">
+                                   <input type="hidden" id="deleteId" name="uuid" th:value="${deleteItem.uuid}">
+                                   <span th:text="#{items.deleteMessage} + ' ' + ${deleteItem.name} + '?'" />
+                               </div>
+                               <div class="modal-footer">
+                                   <button type="submit" class="btn btn-primary" th:text="#{common.delete}"/>
+                                   <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                           th:text="#{common.cancel}"/>
+
+                               </div>
+                           </form>
+                       </div>
+                   </div>
+               </div>
+           </th:block>
+        </article>
+    </div>
+</main>
+<footer th:include="parts/footer.html"></footer>
+</body>
+</html>

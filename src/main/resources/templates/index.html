@@ -4,11 +4,11 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<head th:replace="head.html"></head>
+<head th:replace="parts/head.html"></head>
 
 <body>
 
-<div th:include="header.html"></div>
+<div th:include="parts/header.html"></div>
 
 <main role="main" class="container" style="width: 40%;">
 
@@ -22,6 +22,6 @@
     </div>
 
 </main>
-<div th:include="footer.html"></div>
+<footer th:include="parts/footer.html"></footer>
 </body>
 </html>

@@ -35,3 +35,7 @@ security.oauth2.client.scope: openid,email,profile
 security.oauth2.resource.userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
 security.oauth2.resource.preferTokenInfo: true
 
+openexchangerates:
+  app_id: e9915bd4b65742008cf6854f89d94101
+
+

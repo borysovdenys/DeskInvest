@@ -22,13 +22,16 @@
         <ul class="navbar-nav ml-auto" sec:authorize="isAuthenticated()">
 
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/invests}" th:text="#{header.invests}" />
+                <a class="nav-link" th:href="@{/items}" th:text="#{header.invests}" />
+            </li>
+            <li class="nav-item form-inline">
+                <img th:src="${session.user.getPicture()}" class="rounded-circle" alt=":)" width="40" height="40">
+                <a class="nav-link" th:text="${session.user.getFirstName() + ' ' + session.user.getLastName()}"/>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/logout}" th:text="#{header.logout}"/>
-            </li>
-            <li class="nav-item active">
-                <span th:text="${session.userName}"></span>
+                <a class="nav-link" th:href="@{/logout}">
+                    <span> <i class="fas fa-sign-out-alt fa-lg"></i> </span>
+                </a>
             </li>
             <li class="nav-item"/>
 

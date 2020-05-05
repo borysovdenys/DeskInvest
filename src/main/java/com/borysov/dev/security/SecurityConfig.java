@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/index", "/**/*.css", "/static/**", "/**/*.js")
+                .antMatchers("/", "/index", "/**/*.css", "/static/**", "/js/**", "/**/*.js")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -64,11 +64,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 newUser.setAuthorizedWithGoogle(true);
                 Role userRole = roleRepository.findByName("user");
-                //newUser.setRoles(Arrays.asList(userRole));
+                newUser.setRoles(Arrays.asList(userRole));
                 return newUser;
             });
 
-            request.getSession().setAttribute("authorizedWithGoogle", true);
+            request.getSession().setAttribute("user", user);
 
             return userRepository.save(user);
         };

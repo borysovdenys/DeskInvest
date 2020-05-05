@@ -1,20 +1,20 @@
 package com.borysov.dev.models;
 
+import com.borysov.dev.models.base.IndexEntity;
 import com.borysov.dev.models.enums.CurrencyEnum;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = "item")
+@ToString(exclude = "item")
 @Entity
 @Table(name = "prices")
-public class Price {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID uuid;
+public class Price extends IndexEntity {
 
     @ManyToOne
     @JoinColumn(name="item_uuid", nullable=false)
@@ -26,4 +26,16 @@ public class Price {
     private BigDecimal startRate;
 
     private BigDecimal currentRate;
+
+    public String getStartRateStr() {
+        return getAbbreviation().name() + ": " + getStartRate();
+    }
+
+    public String getCurrentRateStr() {
+        return getAbbreviation().name() + ": " + getCurrentRate();
+    }
+
+    public Price(CurrencyEnum abbreviation) {
+        this.abbreviation = abbreviation;
+    }
 }

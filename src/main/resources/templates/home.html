@@ -4,17 +4,17 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<head th:replace="head.html"></head>
+<head th:replace="parts/head.html"></head>
 
 <body>
 
-<div th:include="header.html"></div>
+<div th:include="parts/header.html"></div>
 <div>
     <br/>
     <br/>
     <h1 class="text-center" th:text="#{home.welcome}"/>
 
 </div>
-<div th:include="footer.html"></div>
+<footer th:include="parts/footer.html"></footer>
 </body>
 </html>

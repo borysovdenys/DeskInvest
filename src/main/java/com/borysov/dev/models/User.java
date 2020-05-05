@@ -1,28 +1,28 @@
 package com.borysov.dev.models;
 
+import com.borysov.dev.models.base.IndexEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+@EqualsAndHashCode(exclude = "roles")
+@ToString(exclude = "roles")
+public class User extends IndexEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID uuid;
-
-/*    @ManyToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade=CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name="user_role",
             joinColumns={@JoinColumn(name="user_id", referencedColumnName="uuid")},
             inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="uuid")})
-    private List<Role> roles;*/
+    private List<Role> roles;
 
     @NotNull
     @Email
@@ -40,7 +40,7 @@ public class User {
 
     private Boolean authorizedWithGoogle = false;
 
-/*    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Item> items;*/
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Item> items;
 
 }
