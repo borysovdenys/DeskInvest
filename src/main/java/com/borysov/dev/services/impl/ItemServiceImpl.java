@@ -163,7 +163,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private BigDecimal getCurrentPriceFromMarketDecimal(String itemPrice) {
-        return new BigDecimal(itemPrice.substring(1));
+        return new BigDecimal(itemPrice.trim().substring(1));
     }
 
     @NotNull

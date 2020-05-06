@@ -24,11 +24,16 @@ public class UserController {
     private final MailingService mailingService;
 
     @GetMapping(Urls.ROOT)
-    public String getIndexPage(@AuthenticationPrincipal User user) {
+    public String getPage(@AuthenticationPrincipal User user) {
         return Objects.nonNull(user) ? "redirect:home" : "index";
     }
 
     @GetMapping(Urls.User.Index.FULL)
+    public String getIndexPage(@AuthenticationPrincipal User user) {
+        return Objects.nonNull(user) ? "redirect:home" : "index";
+    }
+
+    @GetMapping(Urls.User.Login.FULL)
     public String getLoginPage(@AuthenticationPrincipal User user) {
         return Objects.nonNull(user) ? "redirect:home" : "index";
     }
