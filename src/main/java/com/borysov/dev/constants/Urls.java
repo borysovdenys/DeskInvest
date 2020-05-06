@@ -31,7 +31,12 @@ public interface Urls extends Version {
 
         interface DeleteItem {
             String PART = "delete";
+            String AlL = "deleteAll";
             String FULL = PART + URI_SEPARATOR + UUID;
+        }
+
+        interface UpdateAll {
+            String PART = "updateAll";
         }
     }
 

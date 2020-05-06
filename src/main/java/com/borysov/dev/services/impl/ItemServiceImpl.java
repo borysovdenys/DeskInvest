@@ -14,6 +14,7 @@ import com.borysov.dev.repositories.PriceRepository;
 import com.borysov.dev.services.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -91,6 +93,43 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public Page<Item> getAllByUserUUID(Pageable pageable, UUID uuid) {
+        return itemRepository.findAllByUserUuid(pageable, uuid);
+    }
+
+    @Override
+    public void updateItemsByUserUUID(UUID currentAuditorUUID) throws IOException {
+        List<Currency> latestCurrencies = currencyRepository.getLatestCurrencies(CurrencyEnum.values().length);
+        List<Item> allItemsUserUuid = itemRepository.findAllByUserUuid(currentAuditorUUID);
+
+        Map<CurrencyEnum, BigDecimal> mapRates = getMapRates(latestCurrencies);
+
+        for (Item item : allItemsUserUuid) {
+            BigDecimal currentPriceFromMarket = getCurrentPriceFromMarketDecimal(getItemPrice(item.getUrl()));
+            for (Price price : item.getPrices()) {
+                price.setCurrentRate(mapRates.get(price.getAbbreviation()).multiply(currentPriceFromMarket).setScale(2, RoundingMode.HALF_UP));
+                priceRepository.save(price);
+            }
+            item.setLastDateUpdate(LocalDateTime.now());
+            itemRepository.save(item);
+        }
+    }
+
+    @Override
+    public void deleteItemsByUserUUID(UUID currentAuditorUUID) {
+        itemRepository.deleteAll(itemRepository.findAllByUserUuid(currentAuditorUUID));
+    }
+
+    private Map<CurrencyEnum, BigDecimal> getMapRates(List<Currency> latestCurrencies) {
+        Map<CurrencyEnum, BigDecimal> result = new HashMap();
+
+        for (CurrencyEnum value : CurrencyEnum.values()) {
+            result.put(value, getRate(latestCurrencies, value));
+        }
+        return result;
+    }
+
+    @Override
     public Item findItemByUUID(UUID uuid) {
         return itemRepository.findByUuid(uuid).orElse(null);
     }
@@ -105,7 +144,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void generateAndSaveItemPrices(ItemDto modifiedItemDto, Item item) throws IOException {
-        Set<Price> result = new HashSet<>();
         final BigDecimal currentPriceFromMarket = getCurrentPriceFromMarketDecimal(getItemPrice(modifiedItemDto.getUrl()));
         BigDecimal rate;
         Price price;
@@ -119,7 +157,6 @@ public class ItemServiceImpl implements ItemService {
 
             price.setStartRate(rate.multiply(modifiedItemDto.getStartPriceUSD()));
             price.setCurrentRate(rate.multiply(currentPriceFromMarket));
-            result.add(price);
             priceRepository.save(price);
         }
 
@@ -143,9 +180,13 @@ public class ItemServiceImpl implements ItemService {
         String gameId = parts[5];
         String marketHashName = parts[6];
 
-        jsonObject = RequestHelper.readJsonFromUrl(String.format(REQUEST_URL_INFO, marketHashName, gameId));
-
-        return (String) jsonObject.get("lowest_price");
+        try {
+            jsonObject = RequestHelper.readJsonFromUrl(String.format(REQUEST_URL_INFO, marketHashName, gameId));
+            return (String) jsonObject.get("lowest_price");
+        } catch (IOException | JSONException e) {
+            log.error("NPE from steam");
+            return "0";
+        }
     }
 
     private String getItemPicture(String url) throws IOException {

@@ -14,8 +14,6 @@ $(document).ready(function () {
     }
 });
 
-
-
 $(document).ready(function () {
     var isInlineEdit = "[[${deleteItem} != null ? true:false]]";
     if (isInlineEdit) {
@@ -24,3 +22,11 @@ $(document).ready(function () {
 });
 
 
+var wasSubmitted = false;
+function checkBeforeSubmit() {
+        if (!wasSubmitted) {
+            wasSubmitted = true;
+            return wasSubmitted;
+        }
+        return false;
+};

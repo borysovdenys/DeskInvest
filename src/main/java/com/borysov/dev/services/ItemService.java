@@ -19,4 +19,10 @@ public interface ItemService {
     Item findItemByUUID(UUID fromString);
 
     void deleteItemByUUID(UUID uuid);
+
+    Page<Item> getAllByUserUUID(Pageable pageable, UUID uuid);
+
+    void updateItemsByUserUUID(UUID currentAuditorUUID) throws IOException;
+
+    void deleteItemsByUserUUID(UUID currentAuditorUUID);
 }

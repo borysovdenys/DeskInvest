@@ -18,14 +18,22 @@
                 <div class="col">
                     <h4 class="card-title" th:text="#{header.invests}"/>
                 </div>
+                <div class="col"></div>
+                <div class="col"></div>
+                <div class="col"></div>
                 <div class="col">
-                    <a class="btn btn-primary float-right"> <!--@{/items/updateAll}-->
+                    <a th:href="@{/items/updateAll}" class="btn btn-success float-right">
                         <i class="fas fa-sync-alt"></i><span th:text="' ' + #{items.updateAll}"></span>
                     </a>
                 </div>
                 <div class="col">
                     <a th:href="@{/items/{uuid}(uuid=${0})}" class="btn btn-primary float-right">
                         <i class="fas fa-plus"></i><span th:text="' ' + #{items.addNew}"></span>
+                    </a>
+                </div>
+                <div class="col">
+                    <a th:href="@{/items/deleteAll}" class="btn btn-danger float-right">
+                        <i class="fas fa-trash"></i><span th:text="' ' + #{items.deleteAll}"></span>
                     </a>
                 </div>
             </div>
@@ -41,6 +49,7 @@
                 <th scope="col" th:width="150px" th:text="#{items.table.startPrice}"/>
                 <th scope="col" th:width="150px" th:text="#{items.table.currentPrice}"/>
                 <th scope="col" th:width="200px" th:text="#{items.table.lastDateUpdate}"/>
+                <th scope="col"/>
                 <th scope="col"/>
                 </thead>
                 <tbody>
@@ -79,7 +88,7 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <form class="form-group" th:action="@{/items/saveItem}" th:object="${modifiedItem}"
-                                  method="post">
+                                  method="post" onsubmit="return checkBeforeSubmit()">
                                 <div class="modal-header">
                                     <h5 class="modal-title" th:text="#{items.editDialog.title}"/>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -114,7 +123,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary" th:text="#{common.save}"/>
+                                    <button type="submit" class="btn btn-primary" th:text="#{common.save}" id="btnSubmit"/>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{common.cancel}"/>
                                 </div>
                             </form>

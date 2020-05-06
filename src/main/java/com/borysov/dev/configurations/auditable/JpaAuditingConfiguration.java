@@ -23,4 +23,9 @@ public class JpaAuditingConfiguration {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return Optional.of(user.getUuid());
 	}
+
+	public UUID getCurrentAuditorUUID() {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return Optional.of(user.getUuid()).orElse(null);
+	}
 }
