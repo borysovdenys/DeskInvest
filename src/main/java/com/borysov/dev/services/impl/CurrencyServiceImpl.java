@@ -48,10 +48,8 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
     }
 
-    @Scheduled(cron = "1 * * * * *")
+    @Scheduled(cron = "0 0 9 * * *")
     public void scheduleDailyCurrencyUpdateTask() {
-        log.info("bedore dailyCurrencyUpdate");
         dailyCurrencyUpdate();
-        log.info("after dailyCurrencyUpdate");
     }
 }
