@@ -27,7 +27,7 @@ spring:
         starttls.enable: true
 
 security.oauth2.client.clientId: 1083328800849-5208005vtgmoghmfkucocht5kj62drkm.apps.googleusercontent.com
-security.oauth2.client.clientSecret: a0eFI6zQkvRfbEnaNz-jat1t
+security.oauth2.client.clientSecret: chfYnba8k71bLFLBmTWg9h1e
 security.oauth2.client.accessTokenUri: https://www.googleapis.com/oauth2/v4/token
 security.oauth2.client.userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
 security.oauth2.client.clientAuthenticationScheme: form
