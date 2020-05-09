@@ -1,5 +1,5 @@
 package com.borysov.dev.models.enums;
 
 public enum CurrencyEnum {
-    USD, EUR, UAH, RUB
+    UAH, USD, RUB, EUR
 }

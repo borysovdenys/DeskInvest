@@ -2,6 +2,7 @@ package com.borysov.dev.controllers;
 
 import com.borysov.dev.constants.Urls;
 import com.borysov.dev.models.User;
+import com.borysov.dev.models.enums.CurrencyEnum;
 import com.borysov.dev.services.MailingService;
 import com.borysov.dev.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,18 +24,8 @@ public class UserController {
     private final UserService userService;
     private final MailingService mailingService;
 
-    @GetMapping(Urls.ROOT)
+    @GetMapping({Urls.ROOT, Urls.User.Index.FULL})
     public String getPage(@AuthenticationPrincipal User user) {
-        return Objects.nonNull(user) ? "redirect:home" : "index";
-    }
-
-    @GetMapping(Urls.User.Index.FULL)
-    public String getIndexPage(@AuthenticationPrincipal User user) {
-        return Objects.nonNull(user) ? "redirect:home" : "index";
-    }
-
-    @GetMapping(Urls.User.Login.FULL)
-    public String getLoginPage(@AuthenticationPrincipal User user) {
         return Objects.nonNull(user) ? "redirect:home" : "index";
     }
 

@@ -19,7 +19,7 @@ public abstract class ItemDtoMapper {
 /*    @Autowired
     OfficeRepository officeRepository;*/
 
-    @Mapping(target = "startPriceUSD", source = "prices", qualifiedByName = "getStartPrice")
+    @Mapping(target = "startPrice", source = "prices", qualifiedByName = "getStartPrice")
     @Mapping(target = "startDateTrack", source = "startDateTrack", qualifiedByName = "getStartPrice")
     @Mapping(target = "lastDateUpdate", source = "lastDateUpdate", qualifiedByName = "getStartPrice")
     public abstract ItemDto toDto(Item item);
@@ -37,13 +37,13 @@ public abstract class ItemDtoMapper {
 
 
     @Named("getStartPrice")
-    BigDecimal getOffices(Set<Price> prices) {
-        return prices.stream().filter(x -> CurrencyEnum.USD.equals(x.getAbbreviation()))
+    BigDecimal getStartPrice(Set<Price> prices) {
+        return prices.stream().filter(x -> CurrencyEnum.UAH.equals(x.getAbbreviation()))
                 .map(Price::getStartRate).findFirst().orElse(BigDecimal.ZERO);
     }
 
     @Named("getLocalDateTime")
-    LocalDate getOffices(LocalDateTime localDateTime) {
+    LocalDate getLocalDateTime(LocalDateTime localDateTime) {
         return localDateTime.toLocalDate();
     }
 }

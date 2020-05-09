@@ -1,0 +1,60 @@
+<div class="modal" tabindex="-1" role="dialog" id="myModal" xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form class="form-group" th:action="@{/items/saveItem}" th:object="${modifiedItem}"
+                  method="post" onsubmit="return checkBeforeSubmit()">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{items.editDialog.title}"/>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="uuid" name="uuid" th:value="${takenItem.uuid}">
+                    <div class="form-group row required">
+                        <label for="url" class="col-sm-5 control-label"
+                               th:text="#{items.editDialog.url}"/>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" th:value="${takenItem.url}"
+                                   name="url" id="url" required th:maxlength="150">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label for="startDateTrack" class="col-sm-5 control-label"
+                               th:text="#{items.editDialog.startDateTrack}"/>
+                        <div class="col-sm-7">
+                            <input type="date" class="form-control"
+                                   th:value="${takenItem.startDateTrack}"
+                                   name="startDateTrack" id="startDateTrack" required
+                                   th:maxlength="150">
+                        </div>
+                    </div>
+                    <div class="form-group row required">
+                        <label for="url" class="col-sm-5 control-label"
+                               th:text="#{items.editDialog.startPriceUSD}"/>
+
+                        <div class="col-sm-3">
+                            <select class="form-control" th:required="true" id="startCurrency" name="startCurrency">
+                                <option th:each="currency : ${session.currencyEnum}" th:value="${currency}"
+                                        th:text="${currency}"></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control"
+                                   th:value="${takenItem.startPrice}"
+                                   th:min="0" name="startPrice" id="startPrice" required
+                                   th:max="100000000">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" th:text="#{common.save}"
+                            id="btnSubmit"/>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            th:text="#{common.cancel}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

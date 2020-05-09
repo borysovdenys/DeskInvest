@@ -15,11 +15,6 @@ public interface Urls extends Version {
             String PART = "index";
             String FULL = URI_SEPARATOR + PART;
         }
-
-        interface Login {
-            String PART = "login";
-            String FULL = URI_SEPARATOR + PART;
-        }
     }
 
     interface Item {

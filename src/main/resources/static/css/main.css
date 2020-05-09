@@ -1,4 +1,23 @@
 
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    flex-shrink: 0;
+}
+
+.main {
+    flex: 1 0 auto;
+}
+.footer {
+    flex-shrink: 0;
+}
+
 .navbar-nav > li{
     padding-left:30px;
     padding-right:60px;

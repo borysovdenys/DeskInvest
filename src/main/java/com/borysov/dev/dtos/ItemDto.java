@@ -1,5 +1,6 @@
 package com.borysov.dev.dtos;
 
+import com.borysov.dev.models.enums.CurrencyEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,8 @@ public class ItemDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate lastDateUpdate;
 
-    private BigDecimal startPriceUSD;
+    private BigDecimal startPrice;
+
+    private CurrencyEnum startCurrency;
 
 }

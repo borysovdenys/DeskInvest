@@ -4,6 +4,7 @@ import com.borysov.dev.configurations.auditable.JpaAuditingConfiguration;
 import com.borysov.dev.constants.Urls;
 import com.borysov.dev.dtos.ItemDto;
 import com.borysov.dev.models.User;
+import com.borysov.dev.models.enums.CurrencyEnum;
 import com.borysov.dev.services.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Objects;
@@ -32,8 +34,11 @@ public class ItemController {
     private final JpaAuditingConfiguration jpaAuditingConfiguration;
 
     @GetMapping
-    public String getItemsPage(@AuthenticationPrincipal User user, @PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable, Model model) {
+    public String getItemsPage(@AuthenticationPrincipal User user, HttpServletRequest request,
+                               @PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable, Model model) {
+
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
+        request.getSession().setAttribute("currencyEnum", CurrencyEnum.values());
         return Objects.nonNull(user) ? "items" : "index";
     }
 

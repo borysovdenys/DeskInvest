@@ -1,12 +1,15 @@
 package com.borysov.dev.models;
 
 import com.borysov.dev.models.base.Auditable;
+import com.borysov.dev.properties.CommonProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,10 +40,14 @@ public class Item extends Auditable {
     private User user;
 
     public String getStartPrices() {
-     return getPrices().stream().map( Price::getStartRateStr).collect(Collectors.joining("<br>\n"));
+     return getPrices().stream().sorted(Comparator.comparing(Price::getAbbreviation)).map( Price::getStartRateStr).collect(Collectors.joining("<br>\n"));
     }
 
     public String getCurrentPrices() {
-     return getPrices().stream().map( Price::getCurrentRateStr).collect(Collectors.joining("<br/>"));
+     return getPrices().stream().sorted(Comparator.comparing(Price::getAbbreviation)).map( Price::getCurrentRateStr).collect(Collectors.joining("<br/>"));
+    }
+
+    public String getBitSkinsUrl() {
+        return String.format(CommonProperties.BIT_SKINS_URL, URLEncoder.encode(getName()));
     }
 }

@@ -144,21 +144,37 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void generateAndSaveItemPrices(ItemDto modifiedItemDto, Item item) throws IOException {
-        final BigDecimal currentPriceFromMarket = getCurrentPriceFromMarketDecimal(getItemPrice(modifiedItemDto.getUrl()));
-        BigDecimal rate;
+        final BigDecimal currentPriceFromMarketUSD = getCurrentPriceFromMarketDecimal(getItemPrice(modifiedItemDto.getUrl()));
         Price price;
 
         List<Currency> latestCurrencies = currencyRepository.getLatestCurrencies(CurrencyEnum.values().length);
 
+        Map<CurrencyEnum, BigDecimal> mapRates = getMapRates(latestCurrencies);
+
         for (CurrencyEnum currencyEnumValue : CurrencyEnum.values()) {
             price = new Price(currencyEnumValue);
             price.setItem(item);
-            rate = getRate(latestCurrencies, currencyEnumValue);
 
-            price.setStartRate(rate.multiply(modifiedItemDto.getStartPriceUSD()));
-            price.setCurrentRate(rate.multiply(currentPriceFromMarket));
+            if (currencyEnumValue.equals(modifiedItemDto.getStartCurrency())) {
+                price.setStartRate(modifiedItemDto.getStartPrice().setScale(2, RoundingMode.HALF_UP));
+            } else {
+                BigDecimal rateInSelectedCurrency = getExchange(modifiedItemDto, mapRates, currencyEnumValue);
+                price.setStartRate(modifiedItemDto.getStartPrice().divide(rateInSelectedCurrency, 2, RoundingMode.HALF_UP));
+            }
+
+            price.setCurrentRate(mapRates.get(currencyEnumValue).multiply(currentPriceFromMarketUSD).setScale(2, RoundingMode.HALF_UP));
             priceRepository.save(price);
         }
+
+    }
+
+    private BigDecimal getExchange(ItemDto modifiedItemDto, Map<CurrencyEnum, BigDecimal> mapRates, CurrencyEnum currencyEnumValue) {
+        if (BigDecimal.ZERO.compareTo(modifiedItemDto.getStartPrice()) < 0) {
+            BigDecimal rateInSelectedCurrency = mapRates.get(modifiedItemDto.getStartCurrency());
+            BigDecimal rateInCurrentCurrency = mapRates.get(currencyEnumValue);
+            return rateInSelectedCurrency.divide(rateInCurrentCurrency, 5, RoundingMode.HALF_UP);
+        }
+        return BigDecimal.ZERO;
 
     }
 

@@ -6,7 +6,7 @@
 <div th:include="parts/head.html"></div>
 
 <body>
-<div th:include="parts/header.html"></div>
+<header class="header" th:include="parts/header.html"></header>
 <div>
     <br/>
     <h1 class="text-center" th:text="#{title}"/>
@@ -17,6 +17,6 @@
     <h1 class="text-center"><a th:href="@{/index}" th:text="#{error.goBack}"/></h1>
 
 </div>
-<footer th:include="parts/footer.html"></footer>
+<footer  class="footer" th:include="parts/footer.html"></footer>
 </body>
 </html>

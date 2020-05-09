@@ -8,13 +8,17 @@
 
 <body>
 
-<div th:include="parts/header.html"></div>
-<div>
-    <br/>
-    <br/>
-    <h1 class="text-center" th:text="#{home.welcome}"/>
+<header class="header" th:include="parts/header.html"></header>
 
-</div>
-<footer th:include="parts/footer.html"></footer>
+<main role="main" class="container main" style="width: 40%;">
+    <div>
+        <br/>
+        <br/>
+        <h1 class="text-center" th:text="#{home.welcome}"/>
+
+    </div>
+</main>
+
+<footer class="footer" th:include="parts/footer.html"></footer>
 </body>
 </html>
