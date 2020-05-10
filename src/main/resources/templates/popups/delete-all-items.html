@@ -1,0 +1,23 @@
+<div class="modal fade" id="deleteAllPopup" tabindex="-1" role="dialog"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.thymeleaf.org">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" th:text="#{items.deleteAll}"/>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span th:text="#{items.deleteAllMessage}"/>
+            </div>
+            <div class="modal-footer">
+                <a th:href="@{/items/deleteAll}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i><span th:text="' ' + #{items.deleteAll}"></span>
+                </a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{common.cancel}"/>
+            </div>
+        </div>
+    </div>
+</div>

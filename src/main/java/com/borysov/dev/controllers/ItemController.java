@@ -51,15 +51,15 @@ public class ItemController {
 
     @PostMapping(Urls.Item.SaveItem.PART)
     public String saveItem(@AuthenticationPrincipal User user, @PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable,
-                           @Valid ItemDto modifiedItemDto, Model model) {
-        try {
-            itemService.updateItem(modifiedItemDto, user);
-        } catch (IOException e) {
-            model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
+                           @Valid ItemDto modifiedItemDto, Model model) throws IOException {
+        boolean updatedSuccessfully = itemService.updateItem(modifiedItemDto, user);
+
+        if (!updatedSuccessfully) {
             model.addAttribute("addItemError", true);
-            return "items";
         }
-        return "redirect:";
+        model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
+
+        return "items";
     }
 
 
@@ -88,7 +88,11 @@ public class ItemController {
     @GetMapping(Urls.Item.UpdateAll.PART)
     public String update(@AuthenticationPrincipal User user, Model model,
                          @PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable) throws IOException {
-        itemService.updateItemsByUserUUID(jpaAuditingConfiguration.getCurrentAuditorUUID());
+        boolean updatedSuccessfully = itemService.updateItemsByUserUUID(jpaAuditingConfiguration.getCurrentAuditorUUID());
+
+        if (!updatedSuccessfully) {
+            model.addAttribute("updateError", true);
+        }
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
         return "items";
     }

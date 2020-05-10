@@ -62,22 +62,31 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void updateItem(ItemDto modifiedItemDto, User user) throws IOException {
+    public boolean updateItem(ItemDto modifiedItemDto, User user) {
+        Item item = null;
+        try {
+            deleteOldPrices(modifiedItemDto);
 
-        deleteOldPrices(modifiedItemDto);
+            item = itemRepository.findByUuid(modifiedItemDto.getUuid()).orElse(new Item());
 
-        Item item = itemRepository.findByUuid(modifiedItemDto.getUuid()).orElse(new Item());
+            item.setUser(user);
+            item.setUrl(modifiedItemDto.getUrl());
+            item.setName(URLDecoder.decode(getItemName(modifiedItemDto.getUrl()), StandardCharsets.UTF_8.name()));
+            item.setPicture(getItemPicture(modifiedItemDto.getUrl()));
+            item.setStartDateTrack(LocalDateTime.of(modifiedItemDto.getStartDateTrack(), LocalTime.now()));
+            item.setLastDateUpdate(LocalDateTime.now());
 
-        item.setUser(user);
-        item.setUrl(modifiedItemDto.getUrl());
-        item.setName(URLDecoder.decode(getItemName(modifiedItemDto.getUrl()), StandardCharsets.UTF_8.name()));
-        item.setPicture(getItemPicture(modifiedItemDto.getUrl()));
-        item.setStartDateTrack(LocalDateTime.of(modifiedItemDto.getStartDateTrack(), LocalTime.now()));
-        item.setLastDateUpdate(LocalDateTime.now());
+            itemRepository.save(item);
 
-        itemRepository.save(item);
-
-        generateAndSaveItemPrices(modifiedItemDto, item);
+            generateAndSaveItemPrices(modifiedItemDto, item);
+            return true;
+        } catch (Exception e) {
+            log.error(e);
+            if (item != null && item.getPrices().isEmpty()) {
+                itemRepository.delete(item);
+            }
+            return false;
+        }
     }
 
     private void deleteOldPrices(ItemDto modifiedItemDto) {
@@ -98,20 +107,26 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void updateItemsByUserUUID(UUID currentAuditorUUID) throws IOException {
+    public boolean updateItemsByUserUUID(UUID currentAuditorUUID) {
         List<Currency> latestCurrencies = currencyRepository.getLatestCurrencies(CurrencyEnum.values().length);
         List<Item> allItemsUserUuid = itemRepository.findAllByUserUuid(currentAuditorUUID);
 
         Map<CurrencyEnum, BigDecimal> mapRates = getMapRates(latestCurrencies);
 
-        for (Item item : allItemsUserUuid) {
-            BigDecimal currentPriceFromMarket = getCurrentPriceFromMarketDecimal(getItemPrice(item.getUrl()));
-            for (Price price : item.getPrices()) {
-                price.setCurrentRate(mapRates.get(price.getAbbreviation()).multiply(currentPriceFromMarket).setScale(2, RoundingMode.HALF_UP));
-                priceRepository.save(price);
+        try {
+            for (Item item : allItemsUserUuid) {
+                BigDecimal currentPriceFromMarket = getCurrentPriceFromMarketDecimal(getItemPrice(item.getUrl()));
+                for (Price price : item.getPrices()) {
+                    price.setCurrentRate(mapRates.get(price.getAbbreviation()).multiply(currentPriceFromMarket).setScale(2, RoundingMode.HALF_UP));
+                    priceRepository.save(price);
+                }
+                item.setLastDateUpdate(LocalDateTime.now());
+                itemRepository.save(item);
             }
-            item.setLastDateUpdate(LocalDateTime.now());
-            itemRepository.save(item);
+            return true;
+        } catch (Exception e) {
+            log.error(e);
+            return false;
         }
     }
 

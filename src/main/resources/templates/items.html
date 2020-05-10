@@ -12,10 +12,11 @@
 
     <div class="card">
         <article class="card-body">
-            <p th:if="${addItemError}" class="text-danger" th:text="#{items.addNew}"/>
+            <p th:if="${addItemError}" class="text-danger" th:text="#{items.addItemError}"/>
+            <p th:if="${updateError}" class="text-danger" th:text="#{items.updateItemsError}"/>
             <hr>
             <div class="row">
-                <div class="col">
+                <div class="col-3">
                     <h4 class="card-title" th:text="#{header.invests}"/>
                 </div>
                 <div class="col"></div>
@@ -32,9 +33,9 @@
                     </a>
                 </div>
                 <div class="col">
-                    <a th:href="@{/items/deleteAll}" class="btn btn-danger float-right">
+                    <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteAllPopup">
                         <i class="fas fa-trash"></i><span th:text="' ' + #{items.deleteAll}"></span>
-                    </a>
+                    </button>
                 </div>
             </div>
             <br/>
@@ -101,6 +102,7 @@
             </div>
             <th:block th:if="${takenItem != null}" th:include="popups/add-edit-item.html" />
             <th:block th:if="${deleteItem != null}" th:include="popups/delete-one-item.html" />
+            <th:block th:include="popups/delete-all-items.html" />
         </article>
     </div>
 </main>

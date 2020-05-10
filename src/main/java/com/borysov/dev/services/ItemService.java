@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface ItemService {
     ItemDto findAndPrepareItem(String id);
 
-    void updateItem(ItemDto modifiedItem, User user) throws IOException;
+    boolean updateItem(ItemDto modifiedItem, User user) throws IOException;
 
     Page<Item> getAll(Pageable pageable);
 
@@ -22,7 +22,7 @@ public interface ItemService {
 
     Page<Item> getAllByUserUUID(Pageable pageable, UUID uuid);
 
-    void updateItemsByUserUUID(UUID currentAuditorUUID) throws IOException;
+    boolean updateItemsByUserUUID(UUID currentAuditorUUID) throws IOException;
 
     void deleteItemsByUserUUID(UUID currentAuditorUUID);
 }
