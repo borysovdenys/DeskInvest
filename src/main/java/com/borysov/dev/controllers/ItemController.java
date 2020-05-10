@@ -59,7 +59,7 @@ public class ItemController {
         }
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
 
-        return "items";
+        return "redirect:";
     }
 
 
@@ -75,14 +75,14 @@ public class ItemController {
     public String deleteAll(Model model, @PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable) {
         itemService.deleteItemsByUserUUID(jpaAuditingConfiguration.getCurrentAuditorUUID());
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
-        return "items";
+        return "redirect:";
     }
 
     @PostMapping(Urls.Item.DeleteItem.PART)
     public String handleDeleteItem(@PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable, Model model, String uuid) {
         itemService.deleteItemByUUID(UUID.fromString(uuid));
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
-        return "items";
+        return "redirect:";
     }
 
     @GetMapping(Urls.Item.UpdateAll.PART)
@@ -94,6 +94,6 @@ public class ItemController {
             model.addAttribute("updateError", true);
         }
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
-        return "items";
+        return "redirect:";
     }
 }
