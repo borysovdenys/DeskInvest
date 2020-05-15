@@ -1,0 +1,15 @@
+<div xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:if="${addItemSuccess}" class="alert alert-success" role="alert">
+    <output th:text="#{items.addItemSuccess}" class="font-weight-bold" />
+</div>
+<div th:if="${updateItemsSuccess}" class="alert alert-success" role="alert">
+    <output th:text="#{items.updateItemsSuccess}" class="font-weight-bold" />
+</div>
+<div th:if="${updateError}" class="alert alert-danger" role="alert">
+    <output th:text="#{items.updateItemsError}" class="font-weight-bold" />
+</div>
+<div th:if="${addItemError}" class="alert alert-danger" role="alert">
+    <output th:text="#{items.addItemError}" class="font-weight-bold" />
+</div>
+</div>

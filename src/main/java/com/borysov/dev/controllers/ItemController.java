@@ -54,12 +54,10 @@ public class ItemController {
                            @Valid ItemDto modifiedItemDto, Model model) throws IOException {
         boolean updatedSuccessfully = itemService.updateItem(modifiedItemDto, user);
 
-        if (!updatedSuccessfully) {
-            model.addAttribute("addItemError", true);
-        }
+        model.addAttribute(updatedSuccessfully ? "addItemSuccess" : "addItemError", true);
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
 
-        return "redirect:";
+        return "items";
     }
 
 
@@ -75,14 +73,14 @@ public class ItemController {
     public String deleteAll(Model model, @PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable) {
         itemService.deleteItemsByUserUUID(jpaAuditingConfiguration.getCurrentAuditorUUID());
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
-        return "redirect:";
+        return "items";
     }
 
     @PostMapping(Urls.Item.DeleteItem.PART)
     public String handleDeleteItem(@PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable, Model model, String uuid) {
         itemService.deleteItemByUUID(UUID.fromString(uuid));
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
-        return "redirect:";
+        return "items";
     }
 
     @GetMapping(Urls.Item.UpdateAll.PART)
@@ -90,10 +88,8 @@ public class ItemController {
                          @PageableDefault(size = 5, sort = {"createdDate"}) Pageable pageable) throws IOException {
         boolean updatedSuccessfully = itemService.updateItemsByUserUUID(jpaAuditingConfiguration.getCurrentAuditorUUID());
 
-        if (!updatedSuccessfully) {
-            model.addAttribute("updateError", true);
-        }
+        model.addAttribute(updatedSuccessfully ? "updateItemsSuccess" : "updateError", true);
         model.addAttribute("page", itemService.getAllByUserUUID(pageable, jpaAuditingConfiguration.getCurrentAuditorUUID()));
-        return "redirect:";
+        return "items";
     }
 }

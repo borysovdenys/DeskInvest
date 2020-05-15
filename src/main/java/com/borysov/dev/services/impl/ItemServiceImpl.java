@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -44,6 +45,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemDtoMapper itemDtoMapper;
     private final CurrencyRepository currencyRepository;
     private final PriceRepository priceRepository;
+    private final EntityManager entityManager;
 
     private final static String REQUEST_URL_INFO = "https://steamcommunity.com/market/priceoverview/?market_hash_name=%s&appid=%s&currency=1";
     private final static String REQUEST_URL_IMAGE = "https://steamcommunity.com/market/listings/%s/%s/render?start=0&count=1&currency=1&format=json";
@@ -65,6 +67,8 @@ public class ItemServiceImpl implements ItemService {
     public boolean updateItem(ItemDto modifiedItemDto, User user) {
         Item item = null;
         try {
+            final BigDecimal currentPriceFromMarketDecimal = getCurrentPriceFromMarketDecimal(getItemPrice(modifiedItemDto.getUrl()));
+
             deleteOldPrices(modifiedItemDto);
 
             item = itemRepository.findByUuid(modifiedItemDto.getUuid()).orElse(new Item());
@@ -78,7 +82,7 @@ public class ItemServiceImpl implements ItemService {
 
             itemRepository.save(item);
 
-            generateAndSaveItemPrices(modifiedItemDto, item);
+            generateAndSaveItemPrices(modifiedItemDto, item, currentPriceFromMarketDecimal);
             return true;
         } catch (Exception e) {
             log.error(e);
@@ -103,6 +107,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Page<Item> getAllByUserUUID(Pageable pageable, UUID uuid) {
+        entityManager.clear();
         return itemRepository.findAllByUserUuid(pageable, uuid);
     }
 
@@ -158,8 +163,7 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    private void generateAndSaveItemPrices(ItemDto modifiedItemDto, Item item) throws IOException {
-        final BigDecimal currentPriceFromMarketUSD = getCurrentPriceFromMarketDecimal(getItemPrice(modifiedItemDto.getUrl()));
+    private void generateAndSaveItemPrices(ItemDto modifiedItemDto, Item item, final BigDecimal currentPriceFromMarketUSD) throws IOException {
         Price price;
 
         List<Currency> latestCurrencies = currencyRepository.getLatestCurrencies(CurrencyEnum.values().length);
