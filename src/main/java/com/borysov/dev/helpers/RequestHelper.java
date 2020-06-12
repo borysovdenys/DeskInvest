@@ -2,7 +2,8 @@ package com.borysov.dev.helpers;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.web.client.RestClientException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
@@ -35,7 +36,11 @@ public final class RequestHelper {
     private static void JsonReaderRestTemplate(String url) {
           /*  ClientHttpRequestFactory requestFactory = new
                     HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());*/
-            RestTemplate restTemplate = new RestTemplate();
-            System.out.println(restTemplate.getForObject(url, String.class));
+        RestTemplate restTemplate = new RestTemplate();
+        System.out.println(restTemplate.getForObject(url, String.class));
+    }
+
+    public static Document getDocumentByHTML(String html) throws IOException, InterruptedException {
+            return Jsoup.connect(html).ignoreHttpErrors(true).get();
     }
 }

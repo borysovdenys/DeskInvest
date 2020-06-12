@@ -25,4 +25,7 @@ public interface ItemService {
     boolean updateItemsByUserUUID(UUID currentAuditorUUID) throws IOException;
 
     void deleteItemsByUserUUID(UUID currentAuditorUUID);
+
+    boolean updateAllSotaItems();
+
 }

@@ -48,7 +48,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
     }
 
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 20 19 * * *")
     public void scheduleDailyCurrencyUpdateTask() {
         dailyCurrencyUpdate();
     }

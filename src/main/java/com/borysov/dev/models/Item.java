@@ -1,6 +1,8 @@
 package com.borysov.dev.models;
 
 import com.borysov.dev.models.base.Auditable;
+import com.borysov.dev.models.enums.CurrencyEnum;
+import com.borysov.dev.models.enums.ItemType;
 import com.borysov.dev.properties.CommonProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +41,12 @@ public class Item extends Auditable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    private ItemType itemType;
+
+    @Enumerated(EnumType.STRING)
+    private CurrencyEnum startCurrency;
+
     public String getStartPrices() {
      return getPrices().stream().sorted(Comparator.comparing(Price::getAbbreviation)).map( Price::getStartRateStr).collect(Collectors.joining("<br>\n"));
     }
@@ -49,5 +57,13 @@ public class Item extends Auditable {
 
     public String getBitSkinsUrl() {
         return String.format(CommonProperties.BIT_SKINS_URL, URLEncoder.encode(getName()));
+    }
+
+    public boolean isSteamItem() {
+        return ItemType.STEAM.equals(getItemType());
+    }
+
+    public boolean isSotaItem() {
+        return ItemType.SOTA.equals(getItemType());
     }
 }

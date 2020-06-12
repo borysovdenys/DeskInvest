@@ -56,16 +56,22 @@
                     <tbody>
                     <tr th:each="item,iter : ${page}">
                         <td th:text="${iter.count}"/>
-                        <td><img th:src="${item.picture}" alt=":)"/></td>
+                        <td><img th:src="${item.picture}" alt=":)" th:width="70px"/></td>
                         <td th:text="${item.name}"/>
                         <td>
-                            <div>
+                            <div th:if="${item.isSteamItem() || item.itemType == null}">
                                 <a th:href="${item.url}" target="_blank">
                                     <i class="fab fa-steam"></i>
                                     <output th:text=" #{items.table.toSteam}"/>
                                 </a>
                             </div>
-                            <div>
+                            <div th:if="${item.isSotaItem()}">
+                                <a th:href="${item.url}" target="_blank">
+                                    <i class="fab fa-stripe-s"></i>
+                                    <output th:text=" #{items.table.toSota}"/>
+                                </a>
+                            </div>
+                            <div th:if="${item.isSteamItem() || item.itemType == null}">
                                 <a th:href="${item.bitSkinsUrl}" target="_blank">
                                     <i class="fab fa-bitcoin"></i>
                                     <output th:text=" #{items.table.toBitskins}"/>

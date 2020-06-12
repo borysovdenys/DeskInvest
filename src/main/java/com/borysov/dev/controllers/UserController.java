@@ -2,12 +2,10 @@ package com.borysov.dev.controllers;
 
 import com.borysov.dev.constants.Urls;
 import com.borysov.dev.models.User;
-import com.borysov.dev.models.enums.CurrencyEnum;
 import com.borysov.dev.services.MailingService;
 import com.borysov.dev.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

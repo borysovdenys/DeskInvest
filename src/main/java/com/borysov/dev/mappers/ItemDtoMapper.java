@@ -22,6 +22,7 @@ public abstract class ItemDtoMapper {
     @Mapping(target = "startPrice", source = "prices", qualifiedByName = "getStartPrice")
     @Mapping(target = "startDateTrack", source = "startDateTrack", qualifiedByName = "getStartPrice")
     @Mapping(target = "lastDateUpdate", source = "lastDateUpdate", qualifiedByName = "getStartPrice")
+    @Mapping(target = "startCurrency", source = "startCurrency")
     public abstract ItemDto toDto(Item item);
 
 /*    @Mapping(target = "uuid", expression = "java(java.util.UUID.randomUUID())")
