@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 @Service
@@ -39,8 +40,9 @@ public class MailingServiceImpl implements MailingService {
         sendMail(user.getEmail(), String.format(text, user.getFirstName()));
     }*/
 
-    @Scheduled(cron = "0 15 19 * * *")
+    @Scheduled(fixedRate =  60*60*1000)
     public void scheduleCheckWorksFine() {
-        sendMail("defan3171@gmail.com", "App works fine(Scheduled)");
+        log.info("Try to send Scheduled message");
+        sendMail("defan3171@gmail.com", "App works fine(Scheduled) " + new Date());
     }
 }
