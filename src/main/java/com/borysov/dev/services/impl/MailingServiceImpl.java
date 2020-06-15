@@ -40,7 +40,7 @@ public class MailingServiceImpl implements MailingService {
         sendMail(user.getEmail(), String.format(text, user.getFirstName()));
     }*/
 
-    @Scheduled(fixedRate =  60*60*1000)
+    @Scheduled(fixedRate =  60*1000)
     public void scheduleCheckWorksFine() {
         log.info("Try to send Scheduled message");
         sendMail("defan3171@gmail.com", "App works fine(Scheduled) " + new Date());

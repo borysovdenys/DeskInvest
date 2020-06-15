@@ -22,9 +22,13 @@ spring:
       port: 587
       username: borysov.power@gmail.com
       password: borysov.power11
-      properties.mail.smtp:
-        auth: true
-        starttls.enable: true
+      protocol: smtp
+      properties:
+          mail:
+            smtp:
+              auth: true
+              starttls:
+                enable: true
 
 security.oauth2.client.clientId: 1083328800849-5208005vtgmoghmfkucocht5kj62drkm.apps.googleusercontent.com
 security.oauth2.client.clientSecret: chfYnba8k71bLFLBmTWg9h1e
